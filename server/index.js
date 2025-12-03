@@ -71,7 +71,7 @@ const responseSchema = z.object({
 const app = express()
 app.use(cors())
 app.use(express.json({ limit: '1mb' }))
-const TARGET_SONG_BARS = Number(process.env.TARGET_SONG_BARS || 64)
+const TARGET_SONG_BARS = Number(process.env.TARGET_SONG_BARS || 32)
 
 const noteOrder = ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B']
 const noteToMidi = (note) => {
@@ -383,6 +383,7 @@ const concatVariants = (segments, now, req) => {
 }
 
 app.post('/compose', async (req, res) => {
+  const started = Date.now()
   const parsed = composeRequestSchema.safeParse(req.body)
   if (!parsed.success) {
     return res.status(400).json({ error: 'invalid_request', detail: parsed.error.format() })
@@ -399,7 +400,7 @@ app.post('/compose', async (req, res) => {
       const completion = await openai.chat.completions.create({
         model: MODEL,
         temperature: 0.7,
-        max_tokens: 6000,
+        max_tokens: 3000,
         response_format: { type: 'json_object' },
         messages: [
           { role: 'system', content: 'Return JSON only. Keep melodies simple and diatonic.' },
@@ -412,6 +413,11 @@ app.post('/compose', async (req, res) => {
       if (!parsedJson.success) throw new Error(`Validation failed: ${parsedJson.error.message}`)
       const expanded = parsedJson.data.variants.map((v) =>
         extendVariant(v, TARGET_SONG_BARS, parsed.data, now),
+      )
+      console.log(
+        `compose_success source=openai_seed seedBars=${seedBars} targetBars=${TARGET_SONG_BARS} ms=${
+          Date.now() - started
+        }`,
       )
       return res.json({
         variants: expanded,
@@ -426,6 +432,9 @@ app.post('/compose', async (req, res) => {
 
   // fallback to local generation
   const variants = buildLocalVariants(parsed.data, now)
+  console.log(
+    `compose_success source=local_fallback targetBars=${TARGET_SONG_BARS} ms=${Date.now() - started}`,
+  )
   return res.json({ variants, fallback: true })
 })
 
