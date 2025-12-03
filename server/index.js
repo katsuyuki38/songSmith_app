@@ -72,6 +72,7 @@ const app = express()
 app.use(cors())
 app.use(express.json({ limit: '1mb' }))
 const TARGET_SONG_BARS = Number(process.env.TARGET_SONG_BARS || 32)
+const OPENAI_TIMEOUT_MS = Number(process.env.OPENAI_TIMEOUT_MS || 15000)
 
 const noteOrder = ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B']
 const noteToMidi = (note) => {
@@ -407,6 +408,8 @@ app.post('/compose', async (req, res) => {
       const seedBars = Number(process.env.OPENAI_SEED_BARS || 8)
       const prompt = buildPrompt({ ...parsed.data, targetBars: seedBars })
       console.log(`compose_seed_request reqId=${reqId} bars=${seedBars}`)
+      const controller = new AbortController()
+      const timeoutId = setTimeout(() => controller.abort(), OPENAI_TIMEOUT_MS)
       const completion = await openai.chat.completions.create({
         model: MODEL,
         temperature: 0.7,
@@ -416,7 +419,9 @@ app.post('/compose', async (req, res) => {
           { role: 'system', content: 'Return JSON only. Keep melodies simple and diatonic.' },
           { role: 'user', content: prompt },
         ],
+        signal: controller.signal,
       })
+      clearTimeout(timeoutId)
       const content = completion.choices[0]?.message?.content
       if (!content) throw new Error('Empty completion')
       const parsedJson = responseSchema.safeParse(JSON.parse(content))
@@ -434,7 +439,13 @@ app.post('/compose', async (req, res) => {
         targetBars: TARGET_SONG_BARS,
       })
     } catch (err) {
-      console.error('compose_openai_error', { reqId, err })
+      console.error('compose_openai_error', {
+        reqId,
+        message: err?.message,
+        name: err?.name,
+      })
+    } finally {
+      controller?.abort?.()
     }
   }
 

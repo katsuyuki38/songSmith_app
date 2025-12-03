@@ -20,6 +20,7 @@ OPENAI_API_KEY=... npm run dev:full
 - 生成長: `TARGET_SONG_BARS`（デフォルト 32）。長すぎる場合は16などに下げてください。
 - フロントのAIリクエストは20秒でタイムアウトし、失敗時はモックにフォールバックします。
 - ヘルスチェック: `GET /health` で `ok/model/targetSongBars/seedBars/hasApiKey` を返します。
+- OpenAIタイムアウト: `OPENAI_TIMEOUT_MS`（デフォルト 15000ms）。応答が遅い場合は短めに調整してください。
 
 ## 主要機能（現状）
 - 課題入力フォーム（プロンプト・キー・BPM・セクション・タグ）とプリセット
