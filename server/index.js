@@ -296,8 +296,13 @@ const trimTracksToBars = (tracks, bars) =>
   tracks.map((t) => ({ ...t, notes: trimNotesToBars(t.notes || [], bars) }))
 
 const extendVariant = (variant, targetBars, req, now) => {
+  // limit repetition: repeat at most 3 times and cap bars
   const seedLength = calcSegmentLength(variant)
-  const repeats = Math.max(1, Math.ceil(targetBars / Math.max(1, seedLength.bars)))
+  const maxRepeats = 3
+  const repeats = Math.min(
+    maxRepeats,
+    Math.max(1, Math.ceil(targetBars / Math.max(1, seedLength.bars))),
+  )
   let beatOffset = 0
   let barOffset = 0
   const melody = []
@@ -383,12 +388,17 @@ const concatVariants = (segments, now, req) => {
 }
 
 app.post('/compose', async (req, res) => {
+  const reqId = randomUUID()
   const started = Date.now()
   const parsed = composeRequestSchema.safeParse(req.body)
   if (!parsed.success) {
+    console.warn(`compose_invalid reqId=${reqId}`)
     return res.status(400).json({ error: 'invalid_request', detail: parsed.error.format() })
   }
   const now = new Date().toISOString()
+  console.log(
+    `compose_start reqId=${reqId} key=${parsed.data.key} bpm=${parsed.data.bpm} section="${parsed.data.section}"`,
+  )
 
   // seed with GPT (short motifs) and locally extend to full length; fallback to local if GPT fails
   if (process.env.OPENAI_API_KEY) {
@@ -396,7 +406,7 @@ app.post('/compose', async (req, res) => {
       const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY })
       const seedBars = Number(process.env.OPENAI_SEED_BARS || 8)
       const prompt = buildPrompt({ ...parsed.data, targetBars: seedBars })
-      console.log(`compose_seed_request bars=${seedBars}`)
+      console.log(`compose_seed_request reqId=${reqId} bars=${seedBars}`)
       const completion = await openai.chat.completions.create({
         model: MODEL,
         temperature: 0.7,
@@ -415,9 +425,7 @@ app.post('/compose', async (req, res) => {
         extendVariant(v, TARGET_SONG_BARS, parsed.data, now),
       )
       console.log(
-        `compose_success source=openai_seed seedBars=${seedBars} targetBars=${TARGET_SONG_BARS} ms=${
-          Date.now() - started
-        }`,
+        `compose_success reqId=${reqId} source=openai_seed seedBars=${seedBars} targetBars=${TARGET_SONG_BARS} ms=${Date.now() - started}`,
       )
       return res.json({
         variants: expanded,
@@ -426,14 +434,14 @@ app.post('/compose', async (req, res) => {
         targetBars: TARGET_SONG_BARS,
       })
     } catch (err) {
-      console.error('compose_openai_error', err)
+      console.error('compose_openai_error', { reqId, err })
     }
   }
 
   // fallback to local generation
   const variants = buildLocalVariants(parsed.data, now)
   console.log(
-    `compose_success source=local_fallback targetBars=${TARGET_SONG_BARS} ms=${Date.now() - started}`,
+    `compose_success reqId=${reqId} source=local_fallback targetBars=${TARGET_SONG_BARS} ms=${Date.now() - started}`,
   )
   return res.json({ variants, fallback: true })
 })
