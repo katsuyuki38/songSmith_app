@@ -446,7 +446,15 @@ app.post('/compose', async (req, res) => {
   return res.json({ variants, fallback: true })
 })
 
-app.get('/health', (_req, res) => res.json({ ok: true }))
+app.get('/health', (_req, res) =>
+  res.json({
+    ok: true,
+    model: MODEL,
+    targetSongBars: TARGET_SONG_BARS,
+    seedBars: Number(process.env.OPENAI_SEED_BARS || 8),
+    hasApiKey: Boolean(process.env.OPENAI_API_KEY),
+  }),
+)
 
 app.listen(PORT, () => {
   console.log(`API server listening on http://localhost:${PORT}`)
