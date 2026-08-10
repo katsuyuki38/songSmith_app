@@ -28,6 +28,7 @@ jobs:
       - name: Prepare site
         run: |
           mkdir -p _site
+          cp -R public/vocal/. _site/
           cp public/vocal/studio.html _site/index.html
       - name: Upload Vocal Studio
         uses: actions/upload-pages-artifact@v4
