@@ -1,0 +1,32 @@
+name: Vocal Engine CI
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'server/vocal-server.js'
+      - 'vocal-engine/**'
+      - 'package.json'
+      - '.github/workflows/vocal-ci.yml'
+  pull_request:
+    paths:
+      - 'server/vocal-server.js'
+      - 'vocal-engine/**'
+      - 'package.json'
+      - '.github/workflows/vocal-ci.yml'
+
+jobs:
+  syntax:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/setup-node@v5
+        with:
+          node-version: '22'
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.11'
+      - name: Check Node bridge syntax
+        run: node --check server/vocal-server.js
+      - name: Check Python engine syntax
+        run: python -m py_compile vocal-engine/app.py
