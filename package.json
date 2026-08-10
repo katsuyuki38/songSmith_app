@@ -6,7 +6,8 @@
   "scripts": {
     "dev": "vite --host --port 4173 --strictPort",
     "api": "node server/index.js",
-    "dev:full": "npm-run-all -p api dev",
+    "vocal-api": "node server/vocal-server.js",
+    "dev:full": "npm-run-all -p api vocal-api dev",
     "build": "tsc -b && vite build",
     "lint": "eslint .",
     "preview": "vite preview"
