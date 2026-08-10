@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>SongSmith Neural Vocal Render</title>
+<style>
+:root{color-scheme:dark;--bg:#080b14;--panel:#111827;--line:#334155;--text:#eef2ff;--muted:#94a3b8;--a:#22d3ee;--b:#a78bfa;--ok:#34d399;--bad:#fb7185}*{box-sizing:border-box}body{margin:0;background:radial-gradient(circle at 20% 0,#172554,transparent 30%),radial-gradient(circle at 85% 0,#3b0764,transparent 28%),var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","Yu Gothic UI",Meiryo,sans-serif}.app{max-width:1050px;margin:auto;padding:18px}.top{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;align-items:end}.top h1{font-size:clamp(28px,5vw,46px);margin:.2rem 0}.top p{color:var(--muted);max-width:760px;margin:.2rem 0}.tag{border:1px solid var(--line);border-radius:999px;padding:7px 11px;color:#cbd5e1}.grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:16px}@media(max-width:760px){.grid{grid-template-columns:1fr}}.panel{background:#0f172ddd;border:1px solid #263248;border-radius:16px;padding:15px;box-shadow:0 18px 45px #0005}.panel h2{font-size:16px;margin:0 0 10px}.input{display:grid;gap:5px;margin:10px 0}.input label{font-size:12px;color:#cbd5e1}.input input,.input textarea{width:100%;background:#080f1d;border:1px solid var(--line);color:#fff;border-radius:9px;padding:10px;font:inherit}.input textarea{min-height:260px;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:12px}.buttons{display:flex;gap:8px;flex-wrap:wrap}.btn{border:1px solid var(--line);background:#172033;color:#fff;border-radius:9px;padding:10px 13px;font:inherit;cursor:pointer}.btn.main{border:0;background:linear-gradient(135deg,#06b6d4,#8b5cf6);font-weight:800}.btn:disabled{opacity:.45;cursor:not-allowed}.status{display:flex;align-items:center;gap:8px;padding:10px;border:1px solid var(--line);border-radius:10px;background:#080f1d}.dot{width:10px;height:10px;border-radius:50%;background:#64748b}.dot.ok{background:var(--ok);box-shadow:0 0 12px #34d399}.dot.bad{background:var(--bad);box-shadow:0 0 12px #fb7185}.meta{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;margin:10px 0}.meta div{background:#080f1d;border:1px solid #263248;border-radius:10px;padding:9px;text-align:center}.meta b{display:block;font-size:17px}.meta small{color:#64748b}.help{font-size:12px;color:var(--muted);line-height:1.6}.warn{color:#fbbf24}.error{white-space:pre-wrap;color:#fecdd3;background:#3f0d1780;border:1px solid #7f1d1d;border-radius:10px;padding:10px;display:none;font-size:12px}.audio{width:100%;margin-top:10px}.links{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}.links a{color:#a5f3fc;text-decoration:none}.footer{font-size:11px;color:#64748b;padding:14px 2px}
+</style>
+</head>
+<body>
+<div class="app">
+<header class="top"><div><small style="color:#67e8f9;letter-spacing:.18em;font-weight:800">SONGSMITH / NEURAL VOCAL</small><h1>DiffSinger Render</h1><p>Vocal Studioで保存したノートと日本語歌詞をDiffSinger形式へ変換し、ニューラル歌唱エンジンでWAVへレンダリングします。</p></div><span class="tag">Phase 2</span></header>
+
+<div class="grid">
+<section class="panel">
+<h2>1. プロジェクト</h2>
+<div class="meta"><div><b id="count">0</b><small>NOTES</small></div><div><b id="bpmView">--</b><small>BPM</small></div><div><b id="dur">--</b><small>SEC</small></div></div>
+<div class="input"><label>歌詞</label><input id="lyrics" readonly></div>
+<div class="buttons"><button class="btn" id="reload">Vocal Studio保存データを再読込</button><button class="btn" id="demo">デモを使用</button></div>
+<div class="links"><a href="./studio.html">← Vocal Studioで編集する</a></div>
+<p class="help">Vocal Studioで「保存」を押すと、このページが同じブラウザのlocalStorageからプロジェクトを読み込みます。</p>
+</section>
+
+<section class="panel">
+<h2>2. DiffSinger API</h2>
+<div class="input"><label>Vocal API URL</label><input id="api" value="http://127.0.0.1:8790"></div>
+<div class="input"><label>歌手名（モデルが複数話者の場合）</label><input id="speaker" placeholder="未指定"></div>
+<div class="status"><span class="dot" id="dot"></span><div><b id="healthText">未確認</b><div class="help" id="healthDetail">API URLを設定して接続確認してください。</div></div></div>
+<div class="buttons" style="margin-top:10px"><button class="btn" id="health">接続確認</button><button class="btn" id="ds">.ds変換確認</button><button class="btn main" id="render">✨ ニューラル歌声生成</button></div>
+<p class="help warn">公開ページから利用する場合、APIもHTTPSで公開してください。ローカル検証では127.0.0.1:8790を使えます。</p>
+</section>
+</div>
+
+<section class="panel" style="margin-top:12px">
+<h2>3. レンダリング結果</h2>
+<div id="error" class="error"></div>
+<audio id="audio" class="audio" controls></audio>
+<div class="buttons" style="margin-top:10px"><button class="btn" id="download" disabled>WAVを保存</button></div>
+</section>
+
+<section class="panel" style="margin-top:12px">
+<h2>DiffSinger .ds プレビュー</h2>
+<div class="input"><textarea id="preview" readonly placeholder="「.ds変換確認」を押すとここに表示されます。"></textarea></div>
+</section>
+<div class="footer">この画面はOpenVPI DiffSingerの入力/推論フローへ接続するSongSmith独自UIです。実在人物の声を本人の同意なく模倣する用途には使用しないでください。</div>
+</div>
+<script>
+(()=>{'use strict';const $=id=>document.getElementById(id);let project=null,lastBlob=null;const demo=()=>({bpm:112,lyrics:'きっと きみを わすれない',notes:[60,62,64,67,67,69,67,64,65,64,62,60].map((m,i)=>({id:'d'+i,midi:m,start:i*.65,dur:i%4===3?1.1:.6,lyric:['き','っ','と','き','み','を','わ','す','れ','な','い'][i%11],pitch:0,cons:50+(i%3)*8,dyn:82,vib:i%4===3?32:18,vr:5.4,breath:18,scoop:-30}))});function normalize(p){if(!p||!Array.isArray(p.notes)||!p.notes.length)return demo();return{bpm:+p.bpm||112,lyrics:p.lyrics||'',notes:p.notes.map(n=>({...n,vibRate:n.vibRate??n.vr??5.4}))}}function load(){try{project=normalize(JSON.parse(localStorage.getItem('songsmith-vocal-v2')||'null'))}catch{project=demo()}show()}function show(){let end=Math.max(...project.notes.map(n=>n.start+n.dur),0)*60/project.bpm;$('count').textContent=project.notes.length;$('bpmView').textContent=project.bpm;$('dur').textContent=end.toFixed(1);$('lyrics').value=project.lyrics||project.notes.map(n=>n.lyric).join('');}function base(){return $('api').value.trim().replace(/\/$/,'')}function payload(){return{bpm:project.bpm,notes:project.notes,speaker:$('speaker').value.trim()||undefined,lang:'ja',title:'songsmith-vocal'}}function err(v){$('error').style.display=v?'block':'none';$('error').textContent=v||''}async function health(){err('');$('healthText').textContent='確認中…';$('dot').className='dot';try{let r=await fetch(base()+'/health');let j=await r.json();if(!r.ok)throw new Error(JSON.stringify(j));$('dot').className='dot '+(j.ok?'ok':'bad');$('healthText').textContent=j.ok?'Vocal API 接続OK':'Vocal APIは起動中 / Engine未接続';$('healthDetail').textContent=`engineConfigured=${j.engineConfigured??j.configured??'-'} / lang=${j.lang??'-'} / speaker=${j.speaker??'-'}`}catch(e){$('dot').className='dot bad';$('healthText').textContent='接続できません';$('healthDetail').textContent=e.message;err('Vocal APIへ接続できません。\n'+e.message)}}async function ds(){err('');try{let r=await fetch(base()+'/vocal/ds',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify(payload())});let j=await r.json();if(!r.ok)throw new Error(JSON.stringify(j,null,2));$('preview').value=JSON.stringify(j.project,null,2)}catch(e){err(e.message)}}async function render(){err('');$('render').disabled=true;$('render').textContent='生成中…';try{let r=await fetch(base()+'/vocal/render',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify(payload())});if(!r.ok){let t=await r.text();throw new Error(t)}lastBlob=await r.blob();let u=URL.createObjectURL(lastBlob);if($('audio').src)URL.revokeObjectURL($('audio').src);$('audio').src=u;$('audio').play().catch(()=>{});$('download').disabled=false}catch(e){err('ニューラル歌声生成に失敗しました。\n'+e.message)}finally{$('render').disabled=false;$('render').textContent='✨ ニューラル歌声生成'}}$('reload').onclick=load;$('demo').onclick=()=>{project=demo();show()};$('health').onclick=health;$('ds').onclick=ds;$('render').onclick=render;$('download').onclick=()=>{if(!lastBlob)return;let a=document.createElement('a');a.href=URL.createObjectURL(lastBlob);a.download='songsmith-neural-vocal.wav';a.click();setTimeout(()=>URL.revokeObjectURL(a.href),1000)};$('api').value=localStorage.getItem('songsmith-vocal-api')||$('api').value;$('api').onchange=()=>localStorage.setItem('songsmith-vocal-api',$('api').value);load()})();
+</script>
+</body></html>
