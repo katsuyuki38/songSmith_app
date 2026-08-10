@@ -1,0 +1,149 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+<meta name="theme-color" content="#0b1020" />
+<title>SongSmith Vocal Studio</title>
+<style>
+:root{color-scheme:dark;--bg:#080b13;--panel:#111827;--panel2:#171f31;--line:#2a3448;--text:#eef2ff;--muted:#94a3b8;--accent:#67e8f9;--accent2:#a78bfa;--warn:#fbbf24;--danger:#fb7185;--note:#22d3ee;--sel:#c084fc}*{box-sizing:border-box}html,body{margin:0;min-height:100%;background:radial-gradient(circle at 15% 0,#172554 0,transparent 32%),radial-gradient(circle at 85% 0,#3b0764 0,transparent 28%),var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","Hiragino Sans","Yu Gothic UI",Meiryo,sans-serif}button,input,select,textarea{font:inherit}button{cursor:pointer}.app{max-width:1500px;margin:auto;padding:18px}.top{display:flex;gap:14px;align-items:flex-end;justify-content:space-between;flex-wrap:wrap;margin-bottom:14px}.brand small{letter-spacing:.2em;color:var(--accent);font-weight:700}.brand h1{margin:.25rem 0 .2rem;font-size:clamp(25px,4vw,42px)}.brand p{margin:0;color:var(--muted);max-width:850px}.badge{border:1px solid #334155;border-radius:999px;padding:7px 11px;color:#cbd5e1;background:#0f172a99}.toolbar,.panel{background:#0f172acc;border:1px solid #263248;border-radius:16px;box-shadow:0 16px 45px #0005;backdrop-filter:blur(10px)}.toolbar{padding:12px;display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-bottom:12px}.btn{border:1px solid #334155;background:#172033;color:var(--text);border-radius:10px;padding:9px 13px;min-height:40px}.btn:hover{border-color:#64748b}.btn.primary{background:linear-gradient(135deg,#06b6d4,#8b5cf6);border:0;color:#fff;font-weight:800}.btn.danger{border-color:#7f1d1d;color:#fecdd3}.field{display:flex;align-items:center;gap:7px;color:#cbd5e1}.field input,.field select,.field textarea{background:#0b1220;border:1px solid #334155;border-radius:9px;color:#fff;padding:8px}.field input[type=number]{width:76px}.grid{display:grid;grid-template-columns:minmax(0,1fr) 330px;gap:12px}@media(max-width:980px){.grid{grid-template-columns:1fr}}.panel{overflow:hidden}.panelHead{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:12px 14px;border-bottom:1px solid #263248}.panelHead h2{font-size:16px;margin:0}.panelHead span{font-size:12px;color:var(--muted)}.rollWrap{overflow:auto;max-height:620px;touch-action:none;background:#070b14}.roll{position:relative;display:grid;grid-template-columns:70px 1fr;min-width:1120px;user-select:none}.keys{position:relative;background:#0d1320;border-right:1px solid #334155}.key{position:absolute;left:0;right:0;border-bottom:1px solid #1f2937;padding:3px 6px;font-size:10px;color:#64748b}.key.black{background:#0a0f1a;color:#475569}.canvas{position:relative;background-color:#0a1020;background-image:linear-gradient(to right,#1e293b 1px,transparent 1px),linear-gradient(to bottom,#1e293b 1px,transparent 1px);cursor:crosshair}.barline{position:absolute;top:0;bottom:0;border-left:2px solid #47556966;pointer-events:none}.beatline{position:absolute;top:0;bottom:0;border-left:1px solid #33415555;pointer-events:none}.note{position:absolute;border-radius:6px;background:linear-gradient(135deg,#0891b2,#22d3ee);border:1px solid #a5f3fc;color:#06202a;box-shadow:0 3px 12px #06b6d455;overflow:hidden;display:flex;align-items:center;padding:0 5px;font-size:11px;font-weight:800;white-space:nowrap;touch-action:none}.note.selected{background:linear-gradient(135deg,#7c3aed,#c084fc);border-color:#e9d5ff;color:#fff;z-index:4}.note .resize{position:absolute;right:0;top:0;bottom:0;width:9px;background:#ffffff30;cursor:ew-resize}.playhead{position:absolute;top:0;bottom:0;width:2px;background:#fb7185;box-shadow:0 0 10px #fb7185;pointer-events:none;z-index:8;display:none}.side{display:flex;flex-direction:column;gap:12px}.section{padding:14px}.section h3{margin:0 0 10px;font-size:15px}.stack{display:grid;gap:10px}.input{display:grid;gap:5px}.input label{font-size:12px;color:#aab7cc}.input input,.input textarea,.input select{width:100%;background:#0b1220;border:1px solid #334155;border-radius:9px;color:#fff;padding:9px}.input textarea{min-height:86px;resize:vertical}.rangeRow{display:grid;grid-template-columns:1fr 65px;gap:8px;align-items:center}.hint{font-size:11px;color:#718096;line-height:1.5}.moras{display:flex;gap:5px;flex-wrap:wrap}.mora{padding:4px 7px;border:1px solid #334155;border-radius:7px;font-size:12px;background:#111827}.status{margin-left:auto;color:#a5b4fc;font-size:12px}.meters{display:grid;grid-template-columns:repeat(4,1fr);gap:7px}.meter{background:#0b1220;border:1px solid #273449;border-radius:10px;padding:8px;text-align:center}.meter b{display:block;font-size:15px}.meter small{color:#64748b}.footer{padding:14px 2px;color:#64748b;font-size:11px;line-height:1.5}.hidden{display:none!important}
+</style>
+</head>
+<body>
+<div class="app">
+  <header class="top">
+    <div class="brand">
+      <small>SONGSMITH / VOCAL ENGINE</small>
+      <h1>Vocal Studio</h1>
+      <p>日本語の歌詞をモーラ単位に分解し、子音先行・音高・ポルタメント・ビブラート・ダイナミクス・息成分をノートごとに調整できるブラウザ歌声合成エディタ。</p>
+    </div>
+    <div class="badge">Web Audio / ローカル完結</div>
+  </header>
+
+  <div class="toolbar">
+    <button class="btn primary" id="playBtn">▶ 再生</button>
+    <button class="btn" id="stopBtn">■ 停止</button>
+    <button class="btn" id="demoBtn">デモ曲</button>
+    <button class="btn" id="clearBtn">全消去</button>
+    <span class="field">BPM <input id="bpm" type="number" min="40" max="240" value="112"></span>
+    <span class="field">量子化 <select id="quant"><option value="0.25">1/16</option><option value="0.5">1/8</option><option value="1">1/4</option></select></span>
+    <button class="btn" id="saveBtn">保存</button>
+    <button class="btn" id="loadBtn">読込</button>
+    <button class="btn" id="jsonBtn">JSON出力</button>
+    <label class="btn" for="jsonImport">JSON読込</label><input class="hidden" id="jsonImport" type="file" accept="application/json,.json">
+    <button class="btn" id="wavBtn">WAV書出し</button>
+    <span class="status" id="status">準備完了</span>
+  </div>
+
+  <div class="grid">
+    <section class="panel">
+      <div class="panelHead"><h2>ピアノロール</h2><span>空白クリック: ノート追加 / ドラッグ: 移動 / 右端: 長さ変更</span></div>
+      <div class="rollWrap" id="rollWrap">
+        <div class="roll" id="roll">
+          <div class="keys" id="keys"></div>
+          <div class="canvas" id="canvas"><div class="playhead" id="playhead"></div></div>
+        </div>
+      </div>
+    </section>
+
+    <aside class="side">
+      <section class="panel section">
+        <h3>歌詞</h3>
+        <div class="stack">
+          <div class="input"><label>日本語歌詞</label><textarea id="lyrics">きっと きみを わすれない</textarea></div>
+          <button class="btn primary" id="assignBtn">モーラ分解してノートに割り当て</button>
+          <div class="moras" id="moras"></div>
+          <div class="hint">「きゃ・しゅ・ちょ」などの拗音は1モーラとして扱います。「っ」は促音、「ん」は撥音として扱います。</div>
+        </div>
+      </section>
+
+      <section class="panel section" id="editorPanel">
+        <h3>選択ノート調声</h3>
+        <div id="emptyEditor" class="hint">ピアノロールのノートを選択してください。</div>
+        <div id="noteEditor" class="stack hidden">
+          <div class="meters">
+            <div class="meter"><b id="noteName">C4</b><small>NOTE</small></div>
+            <div class="meter"><b id="noteBeat">1.00</b><small>BEAT</small></div>
+            <div class="meter"><b id="noteDur">1.00</b><small>LENGTH</small></div>
+            <div class="meter"><b id="noteHz">261</b><small>Hz</small></div>
+          </div>
+          <div class="input"><label>歌詞 / モーラ</label><input id="lyricEdit" maxlength="8"></div>
+          <div class="input"><label>発音母音</label><select id="vowelEdit"><option value="auto">自動判定</option><option value="a">a / あ</option><option value="i">i / い</option><option value="u">u / う</option><option value="e">e / え</option><option value="o">o / お</option><option value="n">n / ん</option></select></div>
+          <div class="input"><label>ピッチ微調整 (cent)</label><div class="rangeRow"><input id="pitchEdit" type="range" min="-100" max="100" value="0"><input id="pitchNum" type="number" min="-100" max="100" value="0"></div></div>
+          <div class="input"><label>子音先行 (ms)</label><div class="rangeRow"><input id="consEdit" type="range" min="0" max="180" value="55"><input id="consNum" type="number" min="0" max="180" value="55"></div></div>
+          <div class="input"><label>ダイナミクス</label><div class="rangeRow"><input id="dynEdit" type="range" min="20" max="120" value="85"><input id="dynNum" type="number" min="20" max="120" value="85"></div></div>
+          <div class="input"><label>ビブラート深さ (cent)</label><div class="rangeRow"><input id="vibEdit" type="range" min="0" max="80" value="22"><input id="vibNum" type="number" min="0" max="80" value="22"></div></div>
+          <div class="input"><label>ビブラート速さ (Hz)</label><div class="rangeRow"><input id="vibRateEdit" type="range" min="3" max="9" step="0.1" value="5.4"><input id="vibRateNum" type="number" min="3" max="9" step="0.1" value="5.4"></div></div>
+          <div class="input"><label>息成分</label><div class="rangeRow"><input id="breathEdit" type="range" min="0" max="100" value="18"><input id="breathNum" type="number" min="0" max="100" value="18"></div></div>
+          <div class="input"><label>しゃくり / ポルタメント (cent)</label><div class="rangeRow"><input id="scoopEdit" type="range" min="-150" max="150" value="-35"><input id="scoopNum" type="number" min="-150" max="150" value="-35"></div></div>
+          <button class="btn danger" id="deleteNoteBtn">選択ノートを削除</button>
+        </div>
+      </section>
+    </aside>
+  </div>
+
+  <div class="footer">このMVPはVOCALOID製品そのものではなく、歌唱入力・調声の考え方をブラウザ上で再現した独自の簡易歌声合成エンジンです。声はWeb Audioのフォルマント合成で生成します。</div>
+</div>
+<script>
+(() => {
+'use strict';
+const ROW_H=24, MIN_MIDI=48, MAX_MIDI=83, BEATS=32, PX_BEAT=44;
+const $=id=>document.getElementById(id);
+const state={notes:[],selected:null,playing:false,audio:null,stopTimer:null,playStartedAt:0,playDuration:0};
+const names=['C','C#','D','D#','E','F','F#','G','G#','A','A#','B'];
+const formants={a:[800,1150,2900],i:[350,2100,3000],u:[400,900,2400],e:[500,1900,2600],o:[450,800,2830],n:[300,1200,2100]};
+const smallKana='ゃゅょぁぃぅぇぉャュョァィゥェォ';
+const kanaVowel={
+ 'あ':'a','か':'a','が':'a','さ':'a','ざ':'a','た':'a','だ':'a','な':'a','は':'a','ば':'a','ぱ':'a','ま':'a','や':'a','ら':'a','わ':'a','ア':'a','カ':'a','ガ':'a','サ':'a','ザ':'a','タ':'a','ダ':'a','ナ':'a','ハ':'a','バ':'a','パ':'a','マ':'a','ヤ':'a','ラ':'a','ワ':'a',
+ 'い':'i','き':'i','ぎ':'i','し':'i','じ':'i','ち':'i','ぢ':'i','に':'i','ひ':'i','び':'i','ぴ':'i','み':'i','り':'i','ゐ':'i','イ':'i','キ':'i','ギ':'i','シ':'i','ジ':'i','チ':'i','ヂ':'i','ニ':'i','ヒ':'i','ビ':'i','ピ':'i','ミ':'i','リ':'i',
+ 'う':'u','く':'u','ぐ':'u','す':'u','ず':'u','つ':'u','づ':'u','ぬ':'u','ふ':'u','ぶ':'u','ぷ':'u','む':'u','ゆ':'u','る':'u','ウ':'u','ク':'u','グ':'u','ス':'u','ズ':'u','ツ':'u','ヅ':'u','ヌ':'u','フ':'u','ブ':'u','プ':'u','ム':'u','ユ':'u','ル':'u',
+ 'え':'e','け':'e','げ':'e','せ':'e','ぜ':'e','て':'e','で':'e','ね':'e','へ':'e','べ':'e','ぺ':'e','め':'e','れ':'e','ゑ':'e','エ':'e','ケ':'e','ゲ':'e','セ':'e','ゼ':'e','テ':'e','デ':'e','ネ':'e','ヘ':'e','ベ':'e','ペ':'e','メ':'e','レ':'e',
+ 'お':'o','こ':'o','ご':'o','そ':'o','ぞ':'o','と':'o','ど':'o','の':'o','ほ':'o','ぼ':'o','ぽ':'o','も':'o','よ':'o','ろ':'o','を':'o','オ':'o','コ':'o','ゴ':'o','ソ':'o','ゾ':'o','ト':'o','ド':'o','ノ':'o','ホ':'o','ボ':'o','ポ':'o','モ':'o','ヨ':'o','ロ':'o','ヲ':'o','ん':'n','ン':'n'};
+function uid(){return Math.random().toString(36).slice(2,9)}
+function clamp(v,a,b){return Math.max(a,Math.min(b,v))}
+function snap(v){const q=+("quant"&&$("quant").value);return Math.round(v/q)*q}
+function midiName(m){return names[m%12]+(Math.floor(m/12)-1)}
+function midiHz(m,cents=0){return 440*Math.pow(2,(m-69+cents/100)/12)}
+function moraVowel(m){if(!m)return'a';if(m==='ん'||m==='ン')return'n';if(m==='っ'||m==='ッ')return'u';const last=m[m.length-1];if('ゃャぁァ'.includes(last))return'a';if('ゅュぅゥ'.includes(last))return'u';if('ょョぉォ'.includes(last))return'o';if('ぃィ'.includes(last))return'i';if('ぇェ'.includes(last))return'e';for(let i=m.length-1;i>=0;i--){if(kanaVowel[m[i]])return kanaVowel[m[i]]}return'a'}
+function tokenizeJapanese(text){const clean=text.replace(/[\s、。,.!！?？「」『』（）()・…ー]+/g,' ');const out=[];for(const chunk of clean.split(' ').filter(Boolean)){for(const ch of [...chunk]){if(smallKana.includes(ch)&&out.length){out[out.length-1]+=ch}else out.push(ch)}}return out}
+function defaultNote(midi=60,start=0,dur=1,lyric='あ'){return{id:uid(),midi,start,dur,lyric,vowel:'auto',pitch:0,cons:55,dyn:85,vib:22,vibRate:5.4,breath:18,scoop:-35}}
+function setupRoll(){const h=(MAX_MIDI-MIN_MIDI+1)*ROW_H;$("keys").style.height=h+'px';$("canvas").style.height=h+'px';$("canvas").style.width=(BEATS*PX_BEAT)+'px';for(let m=MAX_MIDI;m>=MIN_MIDI;m--){const el=document.createElement('div');el.className='key '+([1,3,6,8,10].includes(m%12)?'black':'');el.style.top=((MAX_MIDI-m)*ROW_H)+'px';el.style.height=ROW_H+'px';el.textContent=midiName(m);$("keys").appendChild(el)}for(let b=0;b<=BEATS;b++){const l=document.createElement('div');l.className=b%4===0?'barline':'beatline';l.style.left=(b*PX_BEAT)+'px';$("canvas").appendChild(l)}}
+function render(){document.querySelectorAll('.note').forEach(n=>n.remove());for(const n of state.notes){const el=document.createElement('div');el.className='note'+(state.selected===n.id?' selected':'');el.dataset.id=n.id;el.style.left=(n.start*PX_BEAT+1)+'px';el.style.top=((MAX_MIDI-n.midi)*ROW_H+2)+'px';el.style.width=Math.max(12,n.dur*PX_BEAT-2)+'px';el.style.height=(ROW_H-4)+'px';el.textContent=n.lyric||midiName(n.midi);const r=document.createElement('span');r.className='resize';el.appendChild(r);$("canvas").appendChild(el)}renderEditor()}
+function select(id){state.selected=id;render()}
+function getSelected(){return state.notes.find(n=>n.id===state.selected)||null}
+function addNoteFromPoint(x,y){const start=clamp(snap(x/PX_BEAT),0,BEATS-.25);const row=clamp(Math.floor(y/ROW_H),0,MAX_MIDI-MIN_MIDI);const midi=MAX_MIDI-row;const n=defaultNote(midi,start,1,'あ');state.notes.push(n);state.notes.sort((a,b)=>a.start-b.start||a.midi-b.midi);state.selected=n.id;render()}
+function renderEditor(){const n=getSelected();$("emptyEditor").classList.toggle('hidden',!!n);$("noteEditor").classList.toggle('hidden',!n);if(!n)return;$("noteName").textContent=midiName(n.midi);$("noteBeat").textContent=(n.start+1).toFixed(2);$("noteDur").textContent=n.dur.toFixed(2);$("noteHz").textContent=Math.round(midiHz(n.midi,n.pitch));$("lyricEdit").value=n.lyric;$("vowelEdit").value=n.vowel;for(const [id,key] of [['pitchEdit','pitch'],['pitchNum','pitch'],['consEdit','cons'],['consNum','cons'],['dynEdit','dyn'],['dynNum','dyn'],['vibEdit','vib'],['vibNum','vib'],['vibRateEdit','vibRate'],['vibRateNum','vibRate'],['breathEdit','breath'],['breathNum','breath'],['scoopEdit','scoop'],['scoopNum','scoop']])$(id).value=n[key]}
+function syncPair(rangeId,numId,key){const apply=v=>{const n=getSelected();if(!n)return;n[key]=+v;$(rangeId).value=v;$(numId).value=v;renderEditor()};$(rangeId).addEventListener('input',e=>apply(e.target.value));$(numId).addEventListener('input',e=>apply(e.target.value))}
+function noiseBuffer(ctx,duration=.18){const len=Math.max(1,Math.floor(ctx.sampleRate*duration));const b=ctx.createBuffer(1,len,ctx.sampleRate),d=b.getChannelData(0);for(let i=0;i<len;i++)d[i]=(Math.random()*2-1)*(1-i/len);return b}
+function consonantType(m){if(!m)return'';const c=m[0];if('さしすせそざじずぜぞサシスセソザジズゼゾ'.includes(c))return's';if('はひふへほハヒフヘホ'.includes(c))return'h';if('かきくけこがぎぐげごカキクケコガギグゲゴ'.includes(c))return'k';if('たちつてとだぢづでどタチツテトダヂヅデド'.includes(c))return't';if('ぱぴぷぺぽばびぶべぼパピプペポバビブベボ'.includes(c))return'p';return''}
+function scheduleVoice(ctx,dest,n,startSec,durSec){if(n.lyric==='っ'||n.lyric==='ッ')return;const vowel=n.vowel==='auto'?moraVowel(n.lyric):n.vowel;const fs=formants[vowel]||formants.a;const amp=clamp(n.dyn/100,0.05,1)*0.22;const consLead=Math.min(durSec*.45,n.cons/1000);const voicedStart=startSec-consLead*.18;const stop=startSec+durSec;
+ const master=ctx.createGain();master.gain.setValueAtTime(0,Math.max(0,voicedStart));master.gain.linearRampToValueAtTime(amp,startSec+0.025);master.gain.setValueAtTime(amp,Math.max(startSec+0.03,stop-0.06));master.gain.exponentialRampToValueAtTime(0.0001,stop);master.connect(dest);
+ const osc=ctx.createOscillator();osc.type='sawtooth';const base=midiHz(n.midi,n.pitch),scoop=midiHz(n.midi,n.pitch+n.scoop);osc.frequency.setValueAtTime(scoop,Math.max(0,voicedStart));osc.frequency.exponentialRampToValueAtTime(base,startSec+Math.min(.11,durSec*.22));
+ const voiced=ctx.createGain();voiced.gain.value=.72;osc.connect(voiced);
+ fs.forEach((f,i)=>{const bp=ctx.createBiquadFilter();bp.type='bandpass';bp.frequency.value=f;bp.Q.value=i===0?5:8;const g=ctx.createGain();g.gain.value=[1,.55,.26][i];voiced.connect(bp);bp.connect(g);g.connect(master)});
+ const lfo=ctx.createOscillator(),lg=ctx.createGain();lfo.frequency.value=n.vibRate;lg.gain.value=base*(Math.pow(2,n.vib/1200)-1);lfo.connect(lg);lg.connect(osc.frequency);lfo.start(startSec+Math.min(.22,durSec*.45));lfo.stop(stop);
+ osc.start(Math.max(0,voicedStart));osc.stop(stop+.02);
+ const breath=ctx.createBufferSource(),bf=ctx.createBiquadFilter(),bg=ctx.createGain();breath.buffer=noiseBuffer(ctx,durSec);bf.type='highpass';bf.frequency.value=2500;bg.gain.value=(n.breath/100)*.07;breath.connect(bf);bf.connect(bg);bg.connect(master);breath.start(startSec);breath.stop(stop);
+ const ct=consonantType(n.lyric);if(ct&&consLead>0){const ns=ctx.createBufferSource(),cf=ctx.createBiquadFilter(),cg=ctx.createGain();ns.buffer=noiseBuffer(ctx,consLead+.03);cf.type=ct==='s'?'bandpass':'highpass';cf.frequency.value=ct==='s'?5200:ct==='h'?2300:3000;cf.Q.value=ct==='s'?2:1;cg.gain.setValueAtTime(.0001,Math.max(0,startSec-consLead));cg.gain.linearRampToValueAtTime(.13*clamp(n.dyn/100,.2,1),startSec-.008);cg.gain.exponentialRampToValueAtTime(.0001,startSec+.018);ns.connect(cf);cf.connect(cg);cg.connect(dest);ns.start(Math.max(0,startSec-consLead));ns.stop(startSec+.03)}}
+function totalDurationSec(){if(!state.notes.length)return 0;const bpm=+$("bpm").value||120;const end=Math.max(...state.notes.map(n=>n.start+n.dur));return end*60/bpm+.6}
+async function play(){stop();if(!state.notes.length){setStatus('ノートがありません');return}const Ctx=window.AudioContext||window.webkitAudioContext;const ctx=new Ctx();state.audio=ctx;await ctx.resume();const comp=ctx.createDynamicsCompressor();comp.threshold.value=-16;comp.knee.value=18;comp.ratio.value=3;comp.attack.value=.004;comp.release.value=.18;comp.connect(ctx.destination);const bpm=+$("bpm").value||120,spb=60/bpm,lead=.16,now=ctx.currentTime+lead;for(const n of state.notes)scheduleVoice(ctx,comp,n,now+n.start*spb,n.dur*spb);state.playing=true;state.playStartedAt=performance.now()+lead*1000;state.playDuration=totalDurationSec();$("playhead").style.display='block';setStatus('再生中');animatePlayhead();state.stopTimer=setTimeout(stop,state.playDuration*1000+lead*1000)}
+function animatePlayhead(){if(!state.playing)return;const bpm=+$("bpm").value||120;const elapsed=Math.max(0,(performance.now()-state.playStartedAt)/1000),beat=elapsed*bpm/60;$("playhead").style.left=(beat*PX_BEAT)+'px';requestAnimationFrame(animatePlayhead)}
+function stop(){state.playing=false;if(state.stopTimer)clearTimeout(state.stopTimer);state.stopTimer=null;if(state.audio){try{state.audio.close()}catch(e){}state.audio=null}$("playhead").style.display='none';setStatus('停止')}
+function setStatus(t){$("status").textContent=t}
+function demo(){state.notes=[];const melody=[60,62,64,67,67,69,67,64,65,64,62,60,62,64,62,60];const lyrics=tokenizeJapanese('きっと きみを わすれない');let b=0;melody.forEach((m,i)=>{const dur=i%4===3?1.5:.5;const n=defaultNote(m,b,dur,lyrics[i%lyrics.length]||'あ');n.vib=i%4===3?32:18;n.dyn=78+(i%5)*5;n.scoop=-28-(i%3)*8;n.cons=45+(i%4)*8;state.notes.push(n);b+=dur});state.selected=state.notes[0]?.id||null;$("lyrics").value='きっと きみを わすれない';showMoras();render();setStatus('デモ曲を読み込みました')}
+function showMoras(){const ms=tokenizeJapanese($("lyrics").value);$("moras").innerHTML='';ms.forEach(m=>{const e=document.createElement('span');e.className='mora';e.textContent=m;$("moras").appendChild(e)});return ms}
+function assignLyrics(){const ms=showMoras();if(!ms.length)return;const sorted=[...state.notes].sort((a,b)=>a.start-b.start||b.midi-a.midi);sorted.forEach((n,i)=>n.lyric=ms[i%ms.length]);render();setStatus(`${ms.length}モーラを割り当てました`)}
+function save(){localStorage.setItem('songsmith-vocal-project',JSON.stringify({version:1,bpm:+$("bpm").value,lyrics:$("lyrics").value,notes:state.notes}));setStatus('ブラウザに保存しました')}
+function load(){try{const p=JSON.parse(localStorage.getItem('songsmith-vocal-project')||'null');if(!p)throw new Error();$("bpm").value=p.bpm||112;$("lyrics").value=p.lyrics||'';state.notes=Array.isArray(p.notes)?p.notes:[];state.selected=state.notes[0]?.id||null;showMoras();render();setStatus('保存データを読み込みました')}catch(e){setStatus('保存データがありません')}}
+function download(name,blob){const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=name;a.click();setTimeout(()=>URL.revokeObjectURL(a.href),1000)}
+function exportJson(){const p={version:1,bpm:+$("bpm").value,lyrics:$("lyrics").value,notes:state.notes};download('songsmith-vocal.json',new Blob([JSON.stringify(p,null,2)],{type:'application/json'}));setStatus('JSONを書き出しました')}
+function importJson(file){const r=new FileReader();r.onload=()=>{try{const p=JSON.parse(r.result);$("bpm").value=p.bpm||112;$("lyrics").value=p.lyrics||'';state.notes=(p.notes||[]).map(n=>({...defaultNote(),...n,id:n.id||uid()}));state.selected=state.notes[0]?.id||null;showMoras();render();setStatus('JSONを読み込みました')}catch(e){setStatus('JSONの形式が正しくありません')}};r.readAsText(file)}
+function encodeWav(audioBuffer){const ch=audioBuffer.numberOfChannels,sr=audioBuffer.sampleRate,len=audioBuffer.length,bytes=44+len*ch*2;const ab=new ArrayBuffer(bytes),v=new DataView(ab);const str=(o,s)=>[...s].forEach((c,i)=>v.setUint8(o+i,c.charCodeAt(0)));str(0,'RIFF');v.setUint32(4,bytes-8,true);str(8,'WAVE');str(12,'fmt ');v.setUint32(16,16,true);v.setUint16(20,1,true);v.setUint16(22,ch,true);v.setUint32(24,sr,true);v.setUint32(28,sr*ch*2,true);v.setUint16(32,ch*2,true);v.setUint16(34,16,true);str(36,'data');v.setUint32(40,len*ch*2,true);let o=44;for(let i=0;i<len;i++)for(let c=0;c<ch;c++){const s=clamp(audioBuffer.getChannelData(c)[i],-1,1);v.setInt16(o,s<0?s*32768:s*32767,true);o+=2}return ab}
+async function exportWav(){if(!state.notes.length){setStatus('ノートがありません');return}setStatus('WAVをレンダリング中…');const bpm=+$("bpm").value||120,spb=60/bpm,dur=totalDurationSec(),sr=44100;const ctx=new OfflineAudioContext(1,Math.ceil(dur*sr),sr);const comp=ctx.createDynamicsCompressor();comp.threshold.value=-16;comp.ratio.value=3;comp.connect(ctx.destination);for(const n of state.notes)scheduleVoice(ctx,comp,n,.18+n.start*spb,n.dur*spb);const b=await ctx.startRendering();download('songsmith-vocal.wav',new Blob([encodeWav(b)],{type:'audio/wav'}));setStatus('WAVを書き出しました')}
+setupRoll();demo();
+$("canvas").addEventListener('pointerdown',e=>{const noteEl=e.target.closest('.note');const rect=$("canvas").getBoundingClientRect();if(!noteEl){addNoteFromPoint(e.clientX-rect.left,e.clientY-rect.top);return}e.preventDefault();const id=noteEl.dataset.id;select(id);const n=getSelected(),sx=e.clientX,sy=e.clientY,orig={start:n.start,midi:n.midi,dur:n.dur};const resizing=e.target.classList.contains('resize');noteEl.setPointerCapture(e.pointerId);const move=ev=>{if(resizing){n.dur=clamp(snap(orig.dur+(ev.clientX-sx)/PX_BEAT),.25,BEATS-n.start)}else{n.start=clamp(snap(orig.start+(ev.clientX-sx)/PX_BEAT),0,BEATS-n.dur);n.midi=clamp(orig.midi-Math.round((ev.clientY-sy)/ROW_H),MIN_MIDI,MAX_MIDI)}render()};const up=()=>{noteEl.removeEventListener('pointermove',move);noteEl.removeEventListener('pointerup',up)};noteEl.addEventListener('pointermove',move);noteEl.addEventListener('pointerup',up)});
+$("playBtn").onclick=play;$("stopBtn").onclick=stop;$("demoBtn").onclick=demo;$("clearBtn").onclick=()=>{stop();state.notes=[];state.selected=null;render();setStatus('全消去しました')};$("assignBtn").onclick=assignLyrics;$("saveBtn").onclick=save;$("loadBtn").onclick=load;$("jsonBtn").onclick=exportJson;$("wavBtn").onclick=exportWav;$("jsonImport").onchange=e=>e.target.files[0]&&importJson(e.target.files[0]);$("lyrics").addEventListener('input',showMoras);$("lyricEdit").addEventListener('input',e=>{const n=getSelected();if(n){n.lyric=e.target.value;render()}});$("vowelEdit").addEventListener('change',e=>{const n=getSelected();if(n)n.vowel=e.target.value});syncPair('pitchEdit','pitchNum','pitch');syncPair('consEdit','consNum','cons');syncPair('dynEdit','dynNum','dyn');syncPair('vibEdit','vibNum','vib');syncPair('vibRateEdit','vibRateNum','vibRate');syncPair('breathEdit','breathNum','breath');syncPair('scoopEdit','scoopNum','scoop');$("deleteNoteBtn").onclick=()=>{state.notes=state.notes.filter(n=>n.id!==state.selected);state.selected=null;render()};document.addEventListener('keydown',e=>{if((e.key==='Delete'||e.key==='Backspace')&&!['INPUT','TEXTAREA'].includes(document.activeElement.tagName)){if(state.selected){state.notes=state.notes.filter(n=>n.id!==state.selected);state.selected=null;render()}}if(e.code==='Space'&&!['INPUT','TEXTAREA'].includes(document.activeElement.tagName)){e.preventDefault();state.playing?stop():play()}});
+})();
+</script>
+</body>
+</html>
