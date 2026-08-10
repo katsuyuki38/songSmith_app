@@ -1,0 +1,9 @@
+FROM node:22-slim
+
+WORKDIR /app
+COPY package.json ./package.json
+RUN npm install --omit=dev
+COPY server/vocal-server.js ./server/vocal-server.js
+
+EXPOSE 8790
+CMD ["node", "server/vocal-server.js"]
