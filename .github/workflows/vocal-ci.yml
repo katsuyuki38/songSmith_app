@@ -5,14 +5,24 @@ on:
     branches: [main]
     paths:
       - 'server/vocal-server.js'
+      - 'server/vocal-server-cloud.js'
       - 'vocal-engine/**'
+      - 'Dockerfile.vocal-api'
+      - 'Dockerfile.railway-vocal-api'
+      - 'railway-vocal-api.json'
       - 'package.json'
+      - 'package-lock.json'
       - '.github/workflows/vocal-ci.yml'
   pull_request:
     paths:
       - 'server/vocal-server.js'
+      - 'server/vocal-server-cloud.js'
       - 'vocal-engine/**'
+      - 'Dockerfile.vocal-api'
+      - 'Dockerfile.railway-vocal-api'
+      - 'railway-vocal-api.json'
       - 'package.json'
+      - 'package-lock.json'
       - '.github/workflows/vocal-ci.yml'
 
 jobs:
@@ -26,7 +36,11 @@ jobs:
       - uses: actions/setup-python@v6
         with:
           python-version: '3.11'
-      - name: Check Node bridge syntax
+      - name: Check local Node bridge syntax
         run: node --check server/vocal-server.js
+      - name: Check cloud Node bridge syntax
+        run: node --check server/vocal-server-cloud.js
+      - name: Validate Railway configuration
+        run: python -m json.tool railway-vocal-api.json >/dev/null
       - name: Check Python engine syntax
         run: python -m py_compile vocal-engine/app.py
