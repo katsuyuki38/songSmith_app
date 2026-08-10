@@ -1,0 +1,22 @@
+services:
+  voicevox:
+    image: voicevox/voicevox_engine:cpu-latest
+    restart: unless-stopped
+    ports:
+      - "127.0.0.1:50021:50021"
+
+  vocal-api:
+    build:
+      context: .
+      dockerfile: Dockerfile.vocal-api
+    restart: unless-stopped
+    depends_on:
+      - voicevox
+    environment:
+      VOCAL_ENGINE: voicevox
+      VOCAL_API_PORT: 8790
+      VOICEVOX_ENGINE_URL: http://voicevox:50021
+      VOICEVOX_SING_STYLE: 6000
+      VOICEVOX_FRAME_STYLE: 3001
+    ports:
+      - "127.0.0.1:8790:8790"
