@@ -25,10 +25,14 @@ jobs:
         uses: actions/checkout@v6
       - name: Configure Pages
         uses: actions/configure-pages@v5
+      - name: Prepare site
+        run: |
+          mkdir -p _site
+          cp public/vocal/studio.html _site/index.html
       - name: Upload Vocal Studio
         uses: actions/upload-pages-artifact@v4
         with:
-          path: public/vocal
+          path: _site
 
   deploy:
     environment:
